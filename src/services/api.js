@@ -1,5 +1,6 @@
 import request from '@/utils/request';
 
+
 // category
 export async function queryCategory() {
   console.log('123456');
@@ -7,22 +8,23 @@ export async function queryCategory() {
 }
 
 export async function addCategory(params) {
-  return request('/api/addCategory', {
+  console.log(`parms${JSON.stringify(params)}`)
+  return request('/api/categories', {
     method: 'POST',
-    body: params,
+    body: JSON.stringify(params),
   });
 }
 
 export async function updateCategory(params) {
-  return request('/api/updateCategory', {
-    method: 'POST',
-    body: params,
+  console.log(`update`)
+  return request('/api/categories', {
+    method: 'PATCH',
+    body: JSON.stringify(params),
   });
 }
 
 export async function delCategory(params) {
-  return request('/api/delCategory', {
-    method: 'POST',
-    body: params,
+  return request(`/api/categories/${params}`, {
+    method: 'DELETE',
   });
 }

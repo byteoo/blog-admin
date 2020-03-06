@@ -46,19 +46,13 @@ class Category extends PureComponent {
           dataIndex: 'desc',
         },
         {
-          title: '创建时间',
-          dataIndex: 'create_time',
-          sorter: true,
-          render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-        },
-        {
           title: '操作',
           render: (text, record) => (
             <span>
               <CategoryModal type='edit' record={record} onOk={this.handleUpdate}>
                 <a style={{marginRight: 16}}>编辑</a>
               </CategoryModal>
-              <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(text, record)}>
+              <Popconfirm title="是否删除？" onConfirm={() => this.handleDelete(record.id)}>
                 <Link to="">删除</Link>
               </Popconfirm>
             </span>
@@ -68,56 +62,43 @@ class Category extends PureComponent {
     };
   }
 
+
   componentDidMount() {
-    console.log("didMount")
     const {dispatch} = this.props;
     dispatch({
       type: 'category/fetch'
     })
   }
 
-  handleUpdate = ()=>{
-
+  handleUpdate = (record) => {
+    const {dispatch} = this.props;
+    dispatch({
+      type: 'category/update',
+      payload: record
+    })
   }
 
-  handleOk = () => {
+  handleDelete = (id) => {
     const {dispatch} = this.props;
-    const params = {
-      name: this.state.name,
-      desc: this.state.desc,
-    };
-    new Promise(resolve => {
-      dispatch({
-        type: 'category/addCategory',
-        payload: {
-          resolve,
-          params,
-        },
-      });
-    }).then(res => {
-      // console.log('res :', res);
-      if (res.code === 0) {
-        notification.success({
-          message: res.message,
-        });
-        this.setState({
-          visible: false,
-          name: '',
-          desc: '',
-        });
-        this.handleSearch(this.state.pageNum, this.state.pageSize);
-      } else {
-        notification.error({
-          message: res.message,
-        });
-      }
-    });
-  };
+    dispatch({
+      type: 'category/delete',
+      payload: id
+    })
+  }
+
+  handleCreate = (record) => {
+    const {dispatch} = this.props;
+    console.log(`JSON.stringify(record)${  record}`)
+    console.log(JSON.stringify(record))
+    dispatch({
+      type: 'category/create',
+      payload: record
+    })
+  }
 
 
   render() {
     const {category} = this.props;
-    console.log(JSON.stringify(category.categoryList))
     return (
       <PageHeaderWrapper>
         <Card bordered={false}>
@@ -130,7 +111,7 @@ class Category extends PureComponent {
                       <Search style={{width: '160px'}}/>
                     </span>
                     <span>
-                      <CategoryModal type='create' record={{}} onOk={this.handleOk}>
+                      <CategoryModal type='create' record={{}} onOk={this.handleCreate}>
                         <Button
                           style={{marginTop: '3px', marginLeft: '20px'}}
                           type="primary"

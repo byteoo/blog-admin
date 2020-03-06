@@ -14,7 +14,7 @@ export default {
     //     '^': '',
     //   },
     // },
-    '/api': {
+    '/api/': {
       'target': 'http://127.0.0.1:8088/admin/',
       'changeOrigin': true,
       'pathRewrite': {'^/api': ''},

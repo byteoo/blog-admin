@@ -31,6 +31,7 @@ class CategoryModal extends PureComponent {
   okHandler = () => {
     const {onOk} = this.props;
     this.props.form.validateFields((err, values) => {
+      console.log(`values+${JSON.stringify(values)}`)
       if (!err) {
         onOk(values);
         this.hideModelHandler();

@@ -1,4 +1,4 @@
-import {queryCategory} from '@/services/api';
+import {queryCategory, addCategory, delCategory, updateCategory} from '@/services/api';
 
 export default {
   namespace: 'category',
@@ -16,6 +16,18 @@ export default {
           categoryList: response
         },
       });
+    },
+    * delete({payload: id}, {call, put}) {
+      yield call(delCategory, id);
+      yield put({type: 'fetch'});
+    },
+    * update({payload}, {call, put}) {
+      yield call(updateCategory, payload);
+      yield put({type: 'fetch'});
+    },
+    * create({payload}, {call, put, select}) {
+      yield call(addCategory, payload);
+      yield put({type: 'fetch'});
     },
   },
   reducers: {
